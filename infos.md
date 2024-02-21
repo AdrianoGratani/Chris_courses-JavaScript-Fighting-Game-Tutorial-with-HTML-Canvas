@@ -48,5 +48,77 @@
 
 ### NOTES
    HELLO
+   ricorda di includer lo script di js in HTML, SOTTO canvas
 
+   const canvas prende il canvas da html
+   cons c seleziona il contesto come gli sprite etc e gli da un 2d
+   usa il metodo .getContext()
+   la dimensione dello schermo del gioco la gestisci con .width ed .height
+
+   .fillRect()definisce il canva a livello visivo = lo fa 'esistere'
+   .fillRect() e' un API
+   0,0 e' in alto a sinistra, parte da li' poi gli da' width full e height full
+   e' come se si espandesse;
+
+   //////////
+   CREATE PLAYER AND ENEMY
+   inizia con rettangoli
+   perche' e' difficile altrimenit
+   usi i 'rettangoli' per esercitarti
+
+   abbiamo bisogno che quetsi rettangoli interagiscano tra di loro
+   perquesto usiamo object oriented prohramming
+   ovvero usiamo le classi ed istanze
+   usi la class come blueprint
+   e la chiami Sprite anche se all'inizio sar' solou n rettangolo
+   DAGLI la position
+   crea una property position e dala ad un this.
+   qindi position verra' passato come parametro, al constructor
+
+   crey un nuov sprite e lo affidi a un player
+   questa e' una STANZA della classe
+   gli dauy una posizione con x ed y keys
+   per verificare che il to istance della clase
+   sia stata creat a con successo,
+   fai consolelog della variabile che la contiene
    
+   now we have to decide what the player should looks like
+   use the draw() method (random name)
+   e dentro usi c.fillRect(this.position.x)
+   fai reference di x ed y ed un colore
+   con fill STyle
+   adesso con tali cordinate esiste un
+   ponte tra l'istanza e il draw()
+   quindi puoi fare player.draw()
+   e il tuo 'personaggio'' comparira' nello schermo
+    
+    poi crei una nuova istanza con enemy
+    che prende un new Sprite
+    e dagli  x ed y anche a lui
+
+    poi fai enemydraw();
+
+    /// FAI MUOVERE IL PERSONAGGIO
+    usa requeestAnimationFrame() e dallo a
+    window
+    dai questo ad una funzione che si
+    chiama animate(){}
+    is an INFNITE LOOP
+    for a FRAME A FRAME
+    YOU CAN TEST HOW IT WORKS BY APPLYING A  `CONSOLE.LOG()` TO the function
+
+
+  // creare l'evvetto di gravita;
+     usa la key velocity ed affidala al constructor
+     poi mandala alle istanze.
+     velocity, come position, ha due keys `x` ed `y` with both values set to 0 by default.
+     mentreposition `x` ed `y` di enemey sono in un luogo del canva diverso per non sovrapporsi
+
+     
+     // MUOVI IL PERSONAGGIO
+     aggiungi nella CLASSE un metodo e chiamlo update()
+     METTI draw() ed update() DENTRO animate()
+     BASTA CHE CHIAMI update()
+     in quanto update() contiene entrambi()
+     so that they will get calleddd for
+     EVERY FRAME of the game
