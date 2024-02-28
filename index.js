@@ -7,18 +7,33 @@ c.fillRect(0,0, canvas.width, canvas.height);
 
 const gravity = 0.7;  // a 0.2 salta tanto / a 0.7 salta poco, e atterra in fretta. we don't jump as high as before and we fall pretty quicly
 class Sprite{
-    constructor({position, velocity}){
+    constructor({position, velocity, color = 'red'}){
 
         this.position = position;
         this.velocity = velocity;
+        // assegno width per creare le giuste condizioni di esistenza della collisione tra il braccio di player ed il body di enemy, finche' la position di player e' <= enemy.position.x + enemy.WIDTH;
+        this.width = 50;  // ora che ho un this.width posso riassegnare width come this. nel draw() di Sprite
         this.height = 150;
-        this.lastKey                 // e' nel constructor: vale per ogni istanza
+        this.lastKey                 // e' nel constructor: vale per ogni istanza;
+        // corpo: ATTACK
+        this.attackBox = {
+            position: this.position,    // il pugno segue la posizione nello spazio del corpo == non si 'stacca'
+            width: 100,
+            height: 50,
+        }
+        // il colore default dell'istanza BODY:
+        this.color = color;
+        this.isAttacking;    // lo do a player. una funzione attack() lo trasforma in true. se sei vicino a enemy fa danno. altrimenti is attacking e' true ma non fa danno. attack() ha un timeout a 100 ms === isAttacking torna false al termine di esso.
     }
 
 
 draw() {
-    c.fillStyle = 'red';
-    c.fillRect(this.position.x , this.position.y, 50, this.height);
+    c.fillStyle = this.color;
+    c.fillRect(this.position.x , this.position.y, this.width, this.height);
+    // attack-color: IL fillStyle va SEMPRE SOPRA fillRect;
+    c.fillStyle = 'green';
+    // disegna il tuo attacco attackBox usando fillRect:
+    c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);  // adesso hai un 'pugno perenne'
 }
 
 update(){
@@ -30,10 +45,13 @@ update(){
         this.velocity.y = 0
     } else this.velocity.y += gravity;
     // `y` sarebbe la testa del rettangolo. height l'altezza ragginunta in salto === i piedi  // gli do canvas.height perche' canvas HTML inizia a calcolare dal TOP verso il bottom
-    
-    
+    }
 
-
+attack(){
+    this.isAttacking = true;
+    setTimeout(()=> {
+        this.isAttacking = false;
+    }, 100)
 }
 }
 
@@ -58,7 +76,8 @@ const enemy = new Sprite({
     velocity:{
         x: 0,
         y: 0,
-    }
+    },
+    color : 'blue'    // this.color e' red di default nel constructor. ma puoi cambiarlo nell'istanza
 });
 
 const keys = {
@@ -95,18 +114,36 @@ function animate(){
     player.velocity.x = 0; // altrimenti va avanti all'infinito. keyup non basta a fermarlo
     enemy.velocity.x = 0; // mine
     
-    // player animation:
+    // player right left movement animation. conditional to check the last key pressed:
     if(keys.a.pressed && player.lastKey === 'a'){
         player.velocity.x = -5;
     } else if(keys.d.pressed && player.lastKey === 'd'){
         player.velocity.x = 5;
     }
 
-    // enemy animation:
+    // enemy right left movement animation. conditional to check the last key pressed:
     if(keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft'){
         enemy.velocity.x = -5;
     } else if(keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight'){
         enemy.velocity.x = 5;
+    }
+    // CONDITIONAL FOR DETECTION
+    // detect for collision: SE la position del lato sinistro ,PIU' la lunghezza braccio, di player, tocca il lato destro di enemy ...
+    // ma questa condizione e' vera SEMPRE anche se player supera il body di enemy. quindi la collisione avviene a prescindere del contatto!!!
+    // serve una condizione aggiuntiva &&.  il player.attackBox.position.x NON DEVE ESSERE >= a enemy.position.x + la sua ampiezza === il suo lato sinistro.
+    //  && player.attackBox.position.x <= enemy.position.x // se aggiungo + enemy.width e' false di default
+    // questo errore avviene perche' non hai assegnato in precedenza un this.width al constructor. width adesso ci e' necessario assegnarlo ad enemy. una volta definito il this. di width nel constructor, puoi procedere ad assegnare width ad enemy come parametro in questo if statement.
+    // il code viene eseguito fino a che il corpo lato sinistro di player non oltrepassa di un px il corpo lato destro di enemy;
+    // nuovo problema, SE SALTO, E LA POSIZIONE E' TRUE, LA COLLISIONE E' TRUE ANCHE SE NON STO TOCCANDO IL NEMICO. devo aggiungere &&: il position.y bottom del braccio di player deve essere <= al position.y top del braccio di enemy
+    if (
+        player.attackBox.position.x + player.attackBox.width >= enemy.position.x
+        && player.attackBox.position.x <= enemy.position.x + enemy.width
+        && player.attackBox.position.y + player.attackBox.height >= enemy.position.y
+        && player.attackBox.position.y <= enemy.position.y + enemy.height
+        && player.isAttacking
+        ) {
+            player.isAttacking = false;                 // cosi' attack vale uno altrimenti si ripete all'infinito.m
+            console.log('player_attack');
     }
 }
 animate();
@@ -114,13 +151,14 @@ animate();
 
 
 window.addEventListener('keydown',(event) => {// premi il tasto e succede qualcosa;
-    console.log('keydown:', event.key);
+    // console.log('keydown:', event.key);   // ti mostra in console il tasto che premi
 
    switch(event.key){
     case 'd':
         keys.d.pressed = true;   // "muoviti un pixel sull'asse x per ogni volta che fai loop over animate";
                                //player.velocity.x = 0.001;
         player.lastKey = 'd';
+        
         break;
     case 'a':
         keys.a.pressed = true;
@@ -128,6 +166,9 @@ window.addEventListener('keydown',(event) => {// premi il tasto e succede qualco
         break;
     case 'w':
         player.velocity.y = -20;
+        break;
+    case ' ':
+        player.attack();
         break;
         // enemy keydown buttons:
     case 'ArrowRight':
@@ -145,7 +186,7 @@ window.addEventListener('keydown',(event) => {// premi il tasto e succede qualco
 })
 
 window.addEventListener('keyup', (event) => {   // alzi il tasto,  succede qualcosa.
-    console.log('keyup:', event.key);
+    // console.log('keyup:', event.key);   // ti mostra in console il tasto che alzi
 
    switch(event.key){                   // se alzi il dito da `d` succede qualcosa.
     case 'd':
