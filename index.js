@@ -29,6 +29,7 @@ class Sprite{
         // il colore default dell'istanza BODY:
         this.color = color;
         this.isAttacking;    // lo do a player. una funzione attack() lo trasforma in true. se sei vicino a enemy fa danno. altrimenti is attacking e' true ma non fa danno. attack() ha un timeout a 100 ms === isAttacking torna false al termine di esso.
+        this.health = 100;
     }
 
 draw() {
@@ -162,7 +163,7 @@ function animate(){
     } else if(keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight'){
         enemy.velocity.x = 5;
     }
-    // CONDITIONAL FOR DETECTION
+    // CONDITIONAL FOR player
     // detect for collision: SE la position del lato sinistro ,PIU' la lunghezza braccio, di player, tocca il lato destro di enemy ...
     // ma questa condizione e' vera SEMPRE anche se player supera il body di enemy. quindi la collisione avviene a prescindere del contatto!!!
     // serve una condizione aggiuntiva &&.  il player.attackBox.position.x NON DEVE ESSERE >= a enemy.position.x + la sua ampiezza === il suo lato sinistro.
@@ -171,11 +172,15 @@ function animate(){
     // il code viene eseguito fino a che il corpo lato sinistro di player non oltrepassa di un px il corpo lato destro di enemy;
     // nuovo problema, SE SALTO, E LA POSIZIONE E' TRUE, LA COLLISIONE E' TRUE ANCHE SE NON STO TOCCANDO IL NEMICO. devo aggiungere &&: il position.y bottom del braccio di player deve essere <= al position.y top del braccio di enemy
     if (
-        rectangularCollision({ rectangle1: player, rectangle2: enemy })    // dagli come parametro un oggetto, dove alla kwy parametro1 affidi il suo valore `player`/ alla key parametro2 affidi `enemy
+        rectangularCollision({
+            rectangle1: player,
+            rectangle2: enemy
+        })    // dagli come parametro un oggetto, dove alla kwy parametro1 affidi il suo valore `player`/ alla key parametro2 affidi `enemy
         && player.isAttacking
         ) {
             player.isAttacking = false;                 // cosi' attack vale uno altrimenti si ripete all'infinito.
-            console.log('player_attack');            // debugging
+            enemy.health -= 20;
+            document.querySelector('#enemyHealth').style.width = enemy.health + '%';
     };
     // enemy CONDITIONAL FOR COLLISION:
     if (
@@ -183,7 +188,8 @@ function animate(){
         && enemy.isAttacking
         ) {
             enemy.isAttacking = false;
-            console.log('enemy_attack');
+            player.health -= 20;
+            document.querySelector('#playerHealth').style.width = player.health + '%';
     }
 }
 animate();

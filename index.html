@@ -1,2 +1,37 @@
-<canvas></canvas>
-<script src="index.js"></script>
+<html>
+    <head>
+        <style>
+            *{
+                /* anche se aggiungo del padding non mi sposta gli elementi nella pagina */
+                box-sizing: border-box;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div style="position: relative; display: inline-block">
+                                                                                                 <!-- align-items only works if flex is on. it means: align all my children vertically, to the center it creates a 'diamond ring 'effect -->
+            <div style="position: absolute; display: flex; align-items: center; width: 100%; padding: 20px;">    <!-- il container dei player healthbar e del timer -->
+                <!-- player healthbar -->
+                <div style="position: relative; height: 30px; width: 100%">
+                    <div style="background-color: yellow; height: 30px;"></div>
+                    <div id="playerHealth" style="position: absolute; background: red; top: 0; bottom: 0; right: 0; left: 0;"></div>
+                </div>
+                <!-- timer -->
+                <!-- as soon as you set healthbar width to %, flex element in px will shring, in this case: the timer red; to avoid this: -->
+                <div style="background-color: red; height: 100px; width: 100px; flex-shrink: 0;"></div>
+                <!-- enemy healthbar -->
+                <div style="position: relative; height: 30px; width: 100%">
+                    <div style="background-color: yellow; height: 30px"></div>
+                    <div id="enemyHealth"  style="position: absolute; background: blue; top: 0; bottom: 0; right: 0; left: 0;"></div>
+                </div>
+            </div>
+            <canvas></canvas>
+        </div>
+        <script src="index.js"></script>
+    </body>
+
+</html>
+
+
+
