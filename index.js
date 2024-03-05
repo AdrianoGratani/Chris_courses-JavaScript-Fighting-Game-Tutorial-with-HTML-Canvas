@@ -140,6 +140,23 @@ function rectangularCollision({ rectangle1, rectangle2 }){   // !!!per far funzi
 }
 
 
+let timer = 11;
+function decreaseTimer(){
+    setTimeout(decreaseTimer, 1000)
+    if (timer >  0){
+        timer--
+        document.querySelector('#timer').innerHTML = timer;
+    }
+
+    if (player.health === enemy.health) {
+        console.log('draw')
+    }
+}
+
+decreaseTimer();
+
+
+
 function animate(){
     window.requestAnimationFrame(animate);     // crei un --- infinite  loop --- di animate()
     c.fillStyle = 'black'

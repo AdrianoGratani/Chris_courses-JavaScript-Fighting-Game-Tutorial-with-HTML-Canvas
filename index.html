@@ -10,22 +10,24 @@
     <body>
 
         <div style="position: relative; display: inline-block">
-                                                                                                 <!-- align-items only works if flex is on. it means: align all my children vertically, to the center it creates a 'diamond ring 'effect -->
+              <!-- align-items only works if flex is on. it means: align all my children vertically, to the center it creates a 'diamond ring 'effect -->
             <div style="position: absolute; display: flex; align-items: center; width: 100%; padding: 20px;">    <!-- il container dei player healthbar e del timer -->
                 <!-- player healthbar -->
-                <div style="position: relative; height: 30px; width: 100%">
-                    <div style="background-color: yellow; height: 30px;"></div>
-                    <div id="playerHealth" style="position: absolute; background: red; top: 0; bottom: 0; right: 0; left: 0;"></div>
+                <div style="position: relative; height: 30px; width: 100%; display: flex; justify-content: flex-end;">
+                    <div style="background-color: yellow; height: 30px; width: 100%"></div>
+                    <div id="playerHealth" style="position: absolute; background: red; top: 0; bottom: 0; right: 0; width: 100%"></div>
                 </div>
-                <!-- timer -->
-                <!-- as soon as you set healthbar width to %, flex element in px will shring, in this case: the timer red; to avoid this: -->
-                <div style="background-color: red; height: 100px; width: 100px; flex-shrink: 0;"></div>
+                <!-- timer --><!-- as soon as you set healthbar width to %, flex element in px will shring, in this case: the timer red; to avoid this: -->
+                <div id="timer" style="background-color: red; height: 100px; width: 100px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                    10
+                </div>
                 <!-- enemy healthbar -->
                 <div style="position: relative; height: 30px; width: 100%">
                     <div style="background-color: yellow; height: 30px"></div>
                     <div id="enemyHealth"  style="position: absolute; background: blue; top: 0; bottom: 0; right: 0; left: 0;"></div>
                 </div>
             </div>
+            <div style="position: absolute; color: white; display: flex; align-items: center; justify-content: center; top: 0; right: 0; bottom: 0; left: 0;">Tie</div>
             <canvas></canvas>
         </div>
         <script src="index.js"></script>
