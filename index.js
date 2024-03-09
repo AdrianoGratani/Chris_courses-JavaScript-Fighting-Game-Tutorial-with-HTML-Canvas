@@ -140,22 +140,36 @@ function rectangularCollision({ rectangle1, rectangle2 }){   // !!!per far funzi
 }
 
 
-let timer = 11;
+// TIMER AND CONDITIONALS FOR WINNING TEXT DISPLAY AND TIMER
+
+function determineWinner({player, enemy, timerId}) {
+    document.querySelector('#displayText').style.display = 'flex';
+    clearTimeout(timerId);
+    if (player.health === enemy.health) {
+        document.querySelector('#displayText').innerHTML = "Tie";
+    } else if (player.health > enemy.health) {
+        document.querySelector('#displayText').innerHTML = 'Player Wins';
+    } else if (player.health < enemy.health) {
+        document.querySelector('#displayText').innerHTML = 'Enemy Wins';
+    }
+}
+
+let timer = 60;
+let timerId;
 function decreaseTimer(){
-    setTimeout(decreaseTimer, 1000)
+    timerId = setTimeout(decreaseTimer, 1000)
     if (timer >  0){
         timer--
         document.querySelector('#timer').innerHTML = timer;
     }
-
-    if (player.health === enemy.health) {
-        console.log('draw')
+    if (timer === 0) {
+        determineWinner({player, enemy, timerId})
     }
 }
-
 decreaseTimer();
 
 
+// GAME ANIMATION: MOVEMENTS, AND CANVAS FRAME-BY-FRAME REFACTORING FOR UPDATES
 
 function animate(){
     window.requestAnimationFrame(animate);     // crei un --- infinite  loop --- di animate()
@@ -207,6 +221,11 @@ function animate(){
             enemy.isAttacking = false;
             player.health -= 20;
             document.querySelector('#playerHealth').style.width = player.health + '%';
+    }
+
+    // end game based on health:
+    if (player.health <= 0 || enemy.health <= 0){
+        determineWinner({player, enemy, timerId});
     }
 }
 animate();
