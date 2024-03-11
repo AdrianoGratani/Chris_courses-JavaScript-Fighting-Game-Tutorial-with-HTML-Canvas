@@ -1,13 +1,16 @@
 
 class Sprite{
-    constructor({position}){
+    constructor({position, imageSrc}){
         this.position = position;
-        this.velocity = velocity;
         this.width = 50;
         this.height = 150;
+        this.image = new Image()                   // create a new HTML image but within js properties da dare al draw() , poi la devi implementare in index.js come istanza e mandarla al drw() o update()
+        this.image.src = imageSrc
         }
 
-    draw() {}
+    draw() {
+        c.drawImage(this.image, this.position.x, this.position.y)
+    }
 
     update(){
         this.draw();

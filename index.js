@@ -1,3 +1,4 @@
+
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 canvas.width = 1024;
@@ -6,6 +7,15 @@ canvas.height = 576;
 c.fillRect(0,0, canvas.width, canvas.height);
 
 const gravity = 0.7;  // a 0.2 salta tanto / a 0.7 salta poco, e atterra in fretta. we don't jump as high as before and we fall pretty quicly
+
+
+const background = new Sprite({           // devi mandarlo in animate() e fare il suo .update()
+    position: {
+        x: 0,
+        y: 0
+    },
+    imageSrc: './img/background.png'
+})
 
 
 const player = new Fighter({
@@ -110,6 +120,8 @@ function animate(){
     window.requestAnimationFrame(animate);     // crei un --- infinite  loop --- di animate()
     c.fillStyle = 'black'
     c.fillRect(0,0, canvas.width, canvas.height);
+
+    background.update()
     player.update();
     enemy.update();
     // console.log(player.position.x)
