@@ -29,6 +29,8 @@ class Sprite{
         // il colore default dell'istanza BODY:
         this.color = color;
         this.isAttacking;    // lo do a player. una funzione attack() lo trasforma in true. se sei vicino a enemy fa danno. altrimenti is attacking e' true ma non fa danno. attack() ha un timeout a 100 ms === isAttacking torna false al termine di esso.
+       
+        // health
         this.health = 100;
     }
 
@@ -69,6 +71,23 @@ attack(){
     }, 100)                     // ricorda che in attack() hai sttato subito isAttacking su false === a prescindere di questo Settimeout l'animazione del braccio e' brevissima quando le condizioni di collisione sono soddisfatte;
 }
 }
+
+class Fighter{
+    constructor({position}){
+        this.position = position;
+        this.velocity = velocity;
+        this.width = 50;
+        this.height = 150;
+        }
+
+    draw() {}
+
+    update(){
+        this.draw();
+        }
+}
+
+
 
 const player = new Sprite({
     
@@ -157,8 +176,8 @@ function determineWinner({player, enemy, timerId}) {
 let timer = 60;
 let timerId;
 function decreaseTimer(){
-    timerId = setTimeout(decreaseTimer, 1000)
     if (timer >  0){
+        timerId = setTimeout(decreaseTimer, 1000)
         timer--
         document.querySelector('#timer').innerHTML = timer;
     }
