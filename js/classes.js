@@ -1,4 +1,21 @@
+
 class Sprite{
+    constructor({position}){
+        this.position = position;
+        this.velocity = velocity;
+        this.width = 50;
+        this.height = 150;
+        }
+
+    draw() {}
+
+    update(){
+        this.draw();
+        }
+}
+
+
+class Fighter{
     constructor({position, velocity, color = 'red', offset}){    // !!!!!!!! se non mandi le proprieta' come parametri, lo scope interno non le sa leggere === ricevi un errore 'undefined' nel browser
 
         this.position = position;
@@ -26,55 +43,40 @@ class Sprite{
         this.health = 100;
     }
 
-draw() {
-    c.fillStyle = this.color;
-    c.fillRect(this.position.x , this.position.y, this.width, this.height);    // replace 50 usando this.width
+    draw() {
+        c.fillStyle = this.color;
+        c.fillRect(this.position.x , this.position.y, this.width, this.height);    // replace 50 usando this.width
 
-    
-    // conditional per far comparire il pugno quando il giocatore preme ' ';
-    // premi ' ' / isAttacking e' true con timeout 100ms : 1. si attiva questo draw() => compare il pugno  // 2. la funzione attack() viene chiamata [SE VENGONO SODDISFATTE ANCHE LE SUE ALTRE CONDIZIONI];
-    if(this.isAttacking){
-        // attack-color: IL fillStyle va SEMPRE SOPRA fillRect;
-        c.fillStyle = 'green';
-        // disegna il tuo attacco attackBox usando fillRect:
-        c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);  // adesso hai un 'pugno perenne'
-    }
-}
-
-update(){
-    this.draw();
-    this.attackBox.position.x = this.position.x + this.attackBox.offset.x           // devi riaggiornare la posizione del pugno accordinlgy alla posizione del corpo // offset serve per posizionare i due bracci dei personaggi
-    this.attackBox.position.y = this.position.y
-
-    this.position.x += this.velocity.x      // aggiorna la posizione su x dell'istanza 'player' o 'enemy' basandoty sul valore della velocity dell'istanza su y.
-    this.position.y += this.velocity.y;     // aggiorna la posizione su y dell'istanza 'player' o 'enemy' basato sul valore della velocity dell'istanza su y
-    
-    if(this.position.y + this.height + this.velocity.y >= canvas.height){
-        this.velocity.y = 0
-    } else this.velocity.y += gravity;
-    // `y` sarebbe la testa del rettangolo. height l'altezza ragginunta in salto === i piedi  // gli do canvas.height perche' canvas HTML inizia a calcolare dal TOP verso il bottom
-    }
-
-attack(){
-    console.log('attack()')             // for debugging
-    this.isAttacking = true;
-    setTimeout(()=> {
-        this.isAttacking = false;
-    }, 100)                     // ricorda che in attack() hai sttato subito isAttacking su false === a prescindere di questo Settimeout l'animazione del braccio e' brevissima quando le condizioni di collisione sono soddisfatte;
-}
-}
-
-class Fighter{
-    constructor({position}){
-        this.position = position;
-        this.velocity = velocity;
-        this.width = 50;
-        this.height = 150;
+        
+        // conditional per far comparire il pugno quando il giocatore preme ' ';
+        // premi ' ' / isAttacking e' true con timeout 100ms : 1. si attiva questo draw() => compare il pugno  // 2. la funzione attack() viene chiamata [SE VENGONO SODDISFATTE ANCHE LE SUE ALTRE CONDIZIONI];
+        if(this.isAttacking){
+            // attack-color: IL fillStyle va SEMPRE SOPRA fillRect;
+            c.fillStyle = 'green';
+            // disegna il tuo attacco attackBox usando fillRect:
+            c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);  // adesso hai un 'pugno perenne'
         }
-
-    draw() {}
+    }
 
     update(){
         this.draw();
+        this.attackBox.position.x = this.position.x + this.attackBox.offset.x           // devi riaggiornare la posizione del pugno accordinlgy alla posizione del corpo // offset serve per posizionare i due bracci dei personaggi
+        this.attackBox.position.y = this.position.y
+
+        this.position.x += this.velocity.x      // aggiorna la posizione su x dell'istanza 'player' o 'enemy' basandoty sul valore della velocity dell'istanza su y.
+        this.position.y += this.velocity.y;     // aggiorna la posizione su y dell'istanza 'player' o 'enemy' basato sul valore della velocity dell'istanza su y
+        
+        if(this.position.y + this.height + this.velocity.y >= canvas.height){
+            this.velocity.y = 0
+        } else this.velocity.y += gravity;
+        // `y` sarebbe la testa del rettangolo. height l'altezza ragginunta in salto === i piedi  // gli do canvas.height perche' canvas HTML inizia a calcolare dal TOP verso il bottom
         }
+
+    attack(){
+        console.log('attack()')             // for debugging
+        this.isAttacking = true;
+        setTimeout(()=> {
+            this.isAttacking = false;
+        }, 100)                     // ricorda che in attack() hai sttato subito isAttacking su false === a prescindere di questo Settimeout l'animazione del braccio e' brevissima quando le condizioni di collisione sono soddisfatte;
+    }
 }

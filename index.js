@@ -8,8 +8,7 @@ c.fillRect(0,0, canvas.width, canvas.height);
 const gravity = 0.7;  // a 0.2 salta tanto / a 0.7 salta poco, e atterra in fretta. we don't jump as high as before and we fall pretty quicly
 
 
-
-const player = new Sprite({
+const player = new Fighter({
     
     position:{
          x: 0,
@@ -25,10 +24,7 @@ const player = new Sprite({
     }
 });
 
-
-// LE ISTANZE DI SPRITE === I PERSONAGGI
-
-const enemy = new Sprite({
+const enemy = new Fighter({
     
     position:{
          x: 400,
