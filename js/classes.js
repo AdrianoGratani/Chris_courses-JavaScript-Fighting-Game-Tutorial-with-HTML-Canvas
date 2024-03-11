@@ -1,20 +1,45 @@
 
 class Sprite{
-    constructor({position, imageSrc}){
+    constructor({position, imageSrc, scale = 1, framesMax = 1}){    // 1 e' un valore di fallback, per chi non lo usa//  inizializza scale nell'istanza per maggiore precisione
         this.position = position;
         this.width = 50;
         this.height = 150;
         this.image = new Image()                   // create a new HTML image but within js properties da dare al draw() , poi la devi implementare in index.js come istanza e mandarla al drw() o update()
         this.image.src = imageSrc
+        this.scale = scale                       // mandalo 2.5 per shop
+        this.framesMax = framesMax               // sara' 6 per shop in quanto ne hai sei
+        this.framesCurrent = 0    // background ha un solo frame quindi moltiplico 0 per frames = 0 altrimenti mostrerebbe lo schermo nero
+        this.framesElapsed = 0
+        this.framesHold = 10
         }
 
     draw() {
-        c.drawImage(this.image, this.position.x, this.position.y)
+        c.drawImage(
+            this.image,
+            this.framesCurrent * (this.image.width / this.framesMax),                // per mostrare perfetttamente un solo frame dello shops
+            0,
+            
+            this.image.width / this.framesMax,
+            this.image.height,
+            this.position.x,
+            this.position.y,
+            (this.image.width / this.framesMax) * this.scale,              // dato che voglio ridimensionare shop, devo aggiungere un modo per farlo tramite draw() . non usare data statico che affetta pure le altre istanze
+            this.image.height * this.scale
+            )
     }
 
     update(){
         this.draw();
+        this.framesElapsed++
+
+        if(this.framesElapsed % this.framesHold === 0) {
+            if (this.framesCurrent < this.framesMax - 1 ){
+                this.framesCurrent++
+            } else {
+                this.framesCurrent = 0
+            }
         }
+    }
 }
 
 
@@ -69,7 +94,7 @@ class Fighter{
         this.position.x += this.velocity.x      // aggiorna la posizione su x dell'istanza 'player' o 'enemy' basandoty sul valore della velocity dell'istanza su y.
         this.position.y += this.velocity.y;     // aggiorna la posizione su y dell'istanza 'player' o 'enemy' basato sul valore della velocity dell'istanza su y
         
-        if(this.position.y + this.height + this.velocity.y >= canvas.height){
+        if(this.position.y + this.height + this.velocity.y >= canvas.height - 94){
             this.velocity.y = 0
         } else this.velocity.y += gravity;
         // `y` sarebbe la testa del rettangolo. height l'altezza ragginunta in salto === i piedi  // gli do canvas.height perche' canvas HTML inizia a calcolare dal TOP verso il bottom

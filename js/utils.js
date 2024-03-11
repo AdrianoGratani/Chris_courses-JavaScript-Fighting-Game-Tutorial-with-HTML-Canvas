@@ -7,7 +7,6 @@ function rectangularCollision({ rectangle1, rectangle2 }){
     )
 }
 
-
 // TIMER AND CONDITIONALS FOR WINNING TEXT DISPLAY AND TIMER
 
 function determineWinner({player, enemy, timerId}) {
