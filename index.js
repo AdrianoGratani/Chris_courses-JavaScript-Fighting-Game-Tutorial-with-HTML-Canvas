@@ -46,7 +46,7 @@ const player = new Fighter({
     scale: 2.5,
     offset: {
         x: 215,
-        y: 180
+        y: 160
     }
 });
 
@@ -103,7 +103,7 @@ function animate(){
     background.update()
     shop.update()
     player.update();
-    enemy.update();
+    // enemy.update();
     // console.log(player.position.x)
     player.velocity.x = 0; // altrimenti va avanti all'infinito. keyup non basta a fermarlo
     enemy.velocity.x = 0; // mine
