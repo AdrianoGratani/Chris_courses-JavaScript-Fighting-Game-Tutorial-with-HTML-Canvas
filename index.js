@@ -30,9 +30,9 @@ const shop = new Sprite({           // devi mandarlo in animate() e fare il suo 
 const player = new Fighter({
     
     position:{
-         x: 0,
-         y: 0,
-        },
+        x: 0,
+        y: 0,
+    },
     velocity:{
         x: 0,
         y: 0,
@@ -40,6 +40,13 @@ const player = new Fighter({
     offset: {   //bug solved HAI BUTTATO DUE ORE PERCHE TI SEI DIMENTICATO `.x` di offset in `update()           // lo crei nel constructor della classe, lo inizializzi nelle istanze, lo mandi ad update() per animare la posizione del braccio.
         x: 0,
         y: 0,
+    },
+    imageSrc: './img/samuraiMack/Idle.png',
+    framesMax: 8,
+    scale: 2.5,
+    offset: {
+        x: 215,
+        y: 180
     }
 });
 

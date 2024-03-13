@@ -1,6 +1,6 @@
 
 class Sprite{
-    constructor({position, imageSrc, scale = 1, framesMax = 1}){    // 1 e' un valore di fallback, per chi non lo usa//  inizializza scale nell'istanza per maggiore precisione
+    constructor({position, imageSrc, scale = 1, framesMax = 1, offset = {x: 0, y: 0}}){    // 1 e' un valore di fallback, per chi non lo usa//  inizializza scale nell'istanza per maggiore precisione
         this.position = position;
         this.width = 50;
         this.height = 150;
@@ -11,6 +11,7 @@ class Sprite{
         this.framesCurrent = 0    // background ha un solo frame quindi moltiplico 0 per frames = 0 altrimenti mostrerebbe lo schermo nero
         this.framesElapsed = 0
         this.framesHold = 10
+        this.offset = offset
         }
 
     draw() {
@@ -21,8 +22,8 @@ class Sprite{
             
             this.image.width / this.framesMax,
             this.image.height,
-            this.position.x,
-            this.position.y,
+            this.position.x - this.offset.x,
+            this.position.y - this.offset.y,
             (this.image.width / this.framesMax) * this.scale,              // dato che voglio ridimensionare shop, devo aggiungere un modo per farlo tramite draw() . non usare data statico che affetta pure le altre istanze
             this.image.height * this.scale
             )
@@ -42,11 +43,24 @@ class Sprite{
     }
 }
 
+class Fighter extends Sprite{
+    constructor({
+        
+        position,
+        velocity,
+        color = 'red',
+        imageSrc,
+        scale = 1, framesMax = 1,
+        offset = {x: 0, y: 0}})
+        {   // !!!!!!!! se non mandi le proprieta' come parametri, lo scope interno non le sa leggere === ricevi un errore 'undefined' nel browser
+        super({     // super is meant specifically for constructor inheritance from the class you're 'extend' from
+            position,
+            imageSrc,  // this.image, from Sprite constructor()
+            scale,
+            framesMax,
+            offset
+        })
 
-class Fighter{
-    constructor({position, velocity, color = 'red', offset}){    // !!!!!!!! se non mandi le proprieta' come parametri, lo scope interno non le sa leggere === ricevi un errore 'undefined' nel browser
-
-        this.position = position;
         this.velocity = velocity;
         // assegno width per creare le giuste condizioni di esistenza della collisione tra il braccio di player ed il body di enemy, finche' la position di player e' <= enemy.position.x + enemy.WIDTH;
         this.width = 50;  // ora che ho un this.width posso riassegnare width come this. nel draw() di Sprite
@@ -69,22 +83,13 @@ class Fighter{
        
         // health
         this.health = 100;
+        // from the extended class. not parametered properties so the super() created errors
+        this.framesCurrent = 0    // background ha un solo frame quindi moltiplico 0 per frames = 0 altrimenti mostrerebbe lo schermo nero
+        this.framesElapsed = 0
+        this.framesHold = 10
     }
 
-    draw() {
-        c.fillStyle = this.color;
-        c.fillRect(this.position.x , this.position.y, this.width, this.height);    // replace 50 usando this.width
-
-        
-        // conditional per far comparire il pugno quando il giocatore preme ' ';
-        // premi ' ' / isAttacking e' true con timeout 100ms : 1. si attiva questo draw() => compare il pugno  // 2. la funzione attack() viene chiamata [SE VENGONO SODDISFATTE ANCHE LE SUE ALTRE CONDIZIONI];
-        if(this.isAttacking){
-            // attack-color: IL fillStyle va SEMPRE SOPRA fillRect;
-            c.fillStyle = 'green';
-            // disegna il tuo attacco attackBox usando fillRect:
-            c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);  // adesso hai un 'pugno perenne'
-        }
-    }
+   
 
     update(){
         this.draw();
